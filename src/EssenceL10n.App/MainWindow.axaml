@@ -1,0 +1,93 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="EssenceL10n.App.MainWindow"
+        Width="1120" Height="760"
+        MinWidth="900" MinHeight="600"
+        Background="#FFFFFF">
+  <Grid RowDefinitions="Auto,Auto,Auto,*,Auto" Margin="20" RowSpacing="14">
+
+    <!-- 标题栏 -->
+    <Border Grid.Row="0" Background="#F5F7FA" CornerRadius="10" Padding="16" BorderBrush="#E3E7EE" BorderThickness="1">
+      <Grid ColumnDefinitions="Auto,*">
+        <Image x:Name="AppIcon" Grid.Column="0" Width="48" Height="48" VerticalAlignment="Center" Margin="0,0,14,0" />
+        <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="3">
+          <TextBlock x:Name="TitleText" FontSize="18" FontWeight="SemiBold" Foreground="#1B2330" />
+          <TextBlock x:Name="SubtitleText" FontSize="12" Foreground="#6B7688" TextWrapping="Wrap" />
+        </StackPanel>
+      </Grid>
+    </Border>
+
+    <!-- 目录 + 语言 -->
+    <Grid Grid.Row="1" ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto" RowSpacing="8" ColumnSpacing="12">
+      <TextBlock x:Name="GameDirLabel" Grid.Row="0" Grid.Column="0" FontSize="12" Foreground="#6B7688" />
+      <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Spacing="10">
+        <TextBlock x:Name="UiLangLabel" FontSize="12" Foreground="#6B7688" VerticalAlignment="Center" />
+        <ComboBox x:Name="UiLangBox" Width="130" />
+        <TextBlock x:Name="PatchLangLabel" FontSize="12" Foreground="#6B7688" VerticalAlignment="Center" />
+        <ComboBox x:Name="PatchLangBox" Width="150" />
+      </StackPanel>
+
+      <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" ColumnDefinitions="*,Auto,Auto">
+        <TextBox x:Name="DirectoryBox" Grid.Column="0" FontSize="13" />
+        <Button x:Name="BrowseButton" Grid.Column="1" Margin="8,0,0,0" Padding="14,6" />
+        <Button x:Name="DetectButton" Grid.Column="2" Margin="8,0,0,0" Padding="14,6" />
+      </Grid>
+    </Grid>
+
+    <!-- 操作 -->
+    <StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="10">
+      <Button x:Name="ScanButton" Padding="18,8" Background="#2C6BED" Foreground="White" FontWeight="SemiBold" />
+      <Button x:Name="ApplyButton" Padding="18,8" />
+      <Button x:Name="VerifyButton" Padding="18,8" />
+      <CheckBox x:Name="BackupBox" VerticalAlignment="Center" />
+      <Button x:Name="UpdateButton" HorizontalAlignment="Right" Padding="14,6" Background="Transparent" BorderBrush="#E3E7EE" />
+      <TextBlock x:Name="StatusText" VerticalAlignment="Center" FontSize="12" Foreground="#1E9E62" />
+    </StackPanel>
+
+    <!-- 结果 + 日志 -->
+    <Grid Grid.Row="3" ColumnDefinitions="*,380" ColumnSpacing="14">
+      <Border Grid.Column="0" Background="#FFFFFF" BorderBrush="#E3E7EE" BorderThickness="1" CornerRadius="10">
+        <Grid RowDefinitions="Auto,*">
+          <Grid Grid.Row="0" ColumnDefinitions="240,80,90,90,70,*" Background="#F5F7FA" Margin="0">
+            <TextBlock x:Name="ColFile" Grid.Column="0" Margin="12,8" FontSize="12" FontWeight="SemiBold" Foreground="#4A5566" />
+            <TextBlock x:Name="ColUnits" Grid.Column="1" Margin="0,8" FontSize="12" FontWeight="SemiBold" Foreground="#4A5566" />
+            <TextBlock x:Name="ColTranslated" Grid.Column="2" Margin="0,8" FontSize="12" FontWeight="SemiBold" Foreground="#1E9E62" />
+            <TextBlock x:Name="ColKept" Grid.Column="3" Margin="0,8" FontSize="12" FontWeight="SemiBold" Foreground="#6B7688" />
+            <TextBlock x:Name="ColMissing" Grid.Column="4" Margin="0,8" FontSize="12" FontWeight="SemiBold" Foreground="#C9791A" />
+            <TextBlock x:Name="ColCoverage" Grid.Column="5" Margin="8,8" FontSize="12" FontWeight="SemiBold" Foreground="#4A5566" />
+          </Grid>
+          <ScrollViewer Grid.Row="1">
+            <ItemsControl x:Name="FileList">
+              <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                  <Grid ColumnDefinitions="240,80,90,90,70,*" Height="30">
+                    <TextBlock Grid.Column="0" Text="{Binding FileName}" Margin="12,0" VerticalAlignment="Center" FontSize="12" Foreground="#1B2330" />
+                    <TextBlock Grid.Column="1" Text="{Binding Units}" VerticalAlignment="Center" FontSize="12" Foreground="#6B7688" />
+                    <TextBlock Grid.Column="2" Text="{Binding Translated}" VerticalAlignment="Center" FontSize="12" Foreground="#1E9E62" />
+                    <TextBlock Grid.Column="3" Text="{Binding Kept}" VerticalAlignment="Center" FontSize="12" Foreground="#6B7688" />
+                    <TextBlock Grid.Column="4" Text="{Binding Missing}" VerticalAlignment="Center" FontSize="12" Foreground="#C9791A" />
+                    <Grid Grid.Column="5" ColumnDefinitions="Auto,*" Margin="8,0,12,0">
+                      <TextBlock Grid.Column="0" Text="{Binding Coverage}" Width="48" VerticalAlignment="Center" FontSize="12" Foreground="#1B2330" />
+                      <ProgressBar Grid.Column="1" Value="{Binding CoverageValue}" Height="6" VerticalAlignment="Center" Foreground="#2C6BED" />
+                    </Grid>
+                  </Grid>
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+          </ScrollViewer>
+        </Grid>
+      </Border>
+
+      <Border Grid.Column="1" Background="#F5F7FA" BorderBrush="#E3E7EE" BorderThickness="1" CornerRadius="10">
+        <Grid RowDefinitions="Auto,*">
+          <TextBlock x:Name="LogTitle" Grid.Row="0" Margin="12,8" FontSize="12" FontWeight="SemiBold" Foreground="#4A5566" />
+          <TextBox x:Name="LogBox" Grid.Row="1" AcceptsReturn="True" IsReadOnly="True"
+                   FontFamily="Cascadia Mono,Consolas,monospace" FontSize="11"
+                   Background="Transparent" BorderThickness="0" TextWrapping="NoWrap" Margin="8,0,8,8" />
+        </Grid>
+      </Border>
+    </Grid>
+
+    <TextBlock Grid.Row="4" x:Name="FooterText" FontSize="11" Foreground="#9AA3B2" />
+  </Grid>
+</Window>

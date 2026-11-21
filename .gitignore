@@ -1,0 +1,27 @@
+# build output
+bin/
+obj/
+publish/
+TestResults/
+
+# local translation work orders (catalogs/ is the source of truth)
+artifacts/
+
+# catalogs: keep the JSONL source of truth, drop derived exports
+catalogs/**/*.csv
+catalogs/**/*.po
+catalogs/**/*.xlf
+
+# editor / OS
+.vs/
+.idea/
+.vscode/
+*.user
+*.suo
+.DS_Store
+Thumbs.db
+
+# local scratch
+backup/
+*.backup/
+_scratch/

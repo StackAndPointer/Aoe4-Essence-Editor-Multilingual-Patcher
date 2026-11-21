@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/EssenceL10n.App/EssenceL10n.App.csproj" />
+    <Project Path="src/EssenceL10n.Cli/EssenceL10n.Cli.csproj" />
+    <Project Path="src/EssenceL10n.Core/EssenceL10n.Core.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/EssenceL10n.Core.Tests/EssenceL10n.Core.Tests.csproj" />
+  </Folder>
+</Solution>
