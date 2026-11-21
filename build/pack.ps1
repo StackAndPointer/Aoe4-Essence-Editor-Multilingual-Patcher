@@ -21,7 +21,9 @@ $publish = Join-Path $root 'publish'
 $stage   = Join-Path $publish 'app'
 $icon    = Join-Path $root 'src/EssenceL10n.App/Assets/app.ico'
 
-Remove-Item $publish -Recurse -Force -ErrorAction SilentlyContinue
+# 只清理本次会重建的目录；velopack/ 是独立产物，不能被无 -Velopack 的调用抹掉
+Remove-Item $stage, (Join-Path $publish 'cli'), (Join-Path $publish 'gui') -Recurse -Force -ErrorAction SilentlyContinue
+Get-ChildItem $publish -Filter 'EssenceL10n-*.zip' -File -ErrorAction SilentlyContinue | Remove-Item -Force
 New-Item -ItemType Directory -Force -Path $stage | Out-Null
 
 $common = @(
@@ -56,19 +58,46 @@ $update = @{ githubRepo = $GithubRepo; channel = $Channel } | ConvertTo-Json
 Set-Content -LiteralPath (Join-Path $stage 'update.json') -Value $update -Encoding UTF8
 
 Set-Content -LiteralPath (Join-Path $stage 'README.txt') -Encoding UTF8 -Value @"
-《帝国时代 IV》Essence Editor（模组编辑器）多语言热补丁工具
-Age of Empires IV - Essence Editor Multilingual Patcher $Version
+Age of Empires IV - Essence Editor Multilingual Patcher
+Version $Version
+https://github.com/$GithubRepo
 
-用法
-  1. 双击 EssenceL10n.exe（GUI），选择游戏根目录（含 EssenceEditor.exe 的那一层）
-  2. 选择补丁语言，点「扫描」看覆盖率，点「生成补丁」写入
-  3. 写入前默认备份到 <游戏目录>/EssenceL10n.backup/<时间戳>/
+A version-independent localization patcher for the Age of Empires IV Essence Editor
+(mod editor). Translations live in a catalog keyed by assembly + resource + key, so a
+game update no longer invalidates the patch. Anything the catalog does not cover falls
+back to the original English text.
 
-命令行（同一目录下）
-  EssenceL10n.Cli.exe report "<游戏目录>" --catalog catalogs/zh-Hans/zh-Hans.jsonl
-  EssenceL10n.Cli.exe apply  "<游戏目录>" --catalog catalogs/zh-Hans/zh-Hans.jsonl
+QUICK START
+  1. Run EssenceL10n.exe (the GUI).
+  2. Choose the game folder - the one containing EssenceEditor.exe. Steam libraries are
+     detected automatically; you can also browse manually. The tool does not need to be
+     installed inside the game folder.
+  3. Pick a patch language, click "Scan" to inspect coverage, then "Apply patch" to write.
 
-不需要安装 .NET 运行时。
+Originals are backed up to <game folder>/EssenceL10n.backup/<timestamp>/ before writing.
+This can be turned off in the GUI.
+
+COMMAND LINE
+  Every write goes through EssenceL10n.Cli.exe, which lives in this same folder:
+
+    EssenceL10n.Cli.exe report "<game folder>" --catalog catalogs/zh-Hans/zh-Hans.jsonl --json
+    EssenceL10n.Cli.exe apply  "<game folder>" --catalog catalogs/zh-Hans/zh-Hans.jsonl
+    EssenceL10n.Cli.exe verify "<game folder>" --catalog catalogs/zh-Hans/zh-Hans.jsonl --json
+
+  Run EssenceL10n.Cli.exe help for the full command list.
+
+INCLUDED LANGUAGES
+  catalogs/zh-Hans   Simplified Chinese   99.0%
+  catalogs/zh-Hant   Traditional Chinese  99.0%
+  catalogs/ja        Japanese             98.0%
+  catalogs/ru        Russian              98.2%
+  catalogs/es        Spanish              97.5%
+  catalogs/de        German               94.3%
+  catalogs/en        English (baseline)
+
+No .NET runtime or SDK is required - everything is published self-contained.
+
+This is fan-made tooling and is not affiliated with Relic Entertainment or World's Edge.
 "@
 
 Write-Host '==> 压缩 zip' -ForegroundColor Cyan
@@ -85,6 +114,8 @@ if ($Velopack) {
         dotnet tool install --global vpk | Out-Null
         $env:PATH = "$env:USERPROFILE/.dotnet/tools;$env:PATH"
     }
+    $vpkOut = Join-Path $publish 'velopack'
+    New-Item -ItemType Directory -Force -Path $vpkOut | Out-Null
     $vpkArgs = @(
         'pack',
         '--packId', 'EssenceL10n',
@@ -96,7 +127,7 @@ if ($Velopack) {
         '--icon', $icon,
         '--runtime', $Runtime,
         '--channel', $Channel,
-        '--outputDir', (Join-Path $publish 'velopack')
+        '--outputDir', $vpkOut
     )
     & vpk @vpkArgs
     if ($LASTEXITCODE -ne 0) { throw 'Velopack 打包失败' }

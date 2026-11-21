@@ -1,10 +1,7 @@
 name: CI
 
+# 仅在 Actions 页面手动触发，避免每次推送都跑完整矩阵
 on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
   workflow_dispatch:
 
 concurrency:
