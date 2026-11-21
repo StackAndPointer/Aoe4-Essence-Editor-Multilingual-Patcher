@@ -29,8 +29,14 @@
   "msg.noCatalog": "No catalogs found. Expected catalogs\\<language>\\<language>.jsonl next to the app.",
   "summary.coverage": "{0} entries · {1} translated ({2}%)",
   "summary.applied": "Patched {0} of {1} entries",
-  "update.notConfigured": "Update channel not configured (update.json → githubRepo).",
   "update.available": "New version {0} available.",
-  "update.none": "You are on the latest version.",
-  "log.title": "Log"
+  "update.none": "You are on the latest version ({0}).",
+  "log.title": "Log",
+  "update.title": "Update available",
+  "update.checking": "Checking for updates…",
+  "update.body": "You are running {0}. Version {1} is available on GitHub Releases.",
+  "update.download": "Open download page",
+  "update.later": "Later",
+  "update.downloadOpened": "Download page opened for {0}.",
+  "update.notInstalledHint": "This copy is not installed via the Velopack installer or portable build, so it cannot update itself in place. Download the new release and replace this folder."
 }

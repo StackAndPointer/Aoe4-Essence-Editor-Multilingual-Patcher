@@ -29,8 +29,14 @@
   "msg.noCatalog": "Keine Kataloge gefunden. Erwartet: catalogs\\<Sprache>\\<Sprache>.jsonl.",
   "summary.coverage": "{0} Einträge · {1} übersetzt ({2}%)",
   "summary.applied": "{0} von {1} Einträgen geschrieben",
-  "update.notConfigured": "Update-Kanal nicht konfiguriert (update.json → githubRepo).",
   "update.available": "Neue Version {0} verfügbar.",
-  "update.none": "Sie sind auf dem neuesten Stand.",
-  "log.title": "Protokoll"
+  "update.none": "Sie sind auf dem neuesten Stand ({0}).",
+  "log.title": "Protokoll",
+  "update.title": "Update verfügbar",
+  "update.checking": "Suche nach Updates…",
+  "update.body": "Installiert ist {0}. Auf GitHub Releases liegt {1} vor.",
+  "update.download": "Downloadseite öffnen",
+  "update.later": "Später",
+  "update.downloadOpened": "Downloadseite für {0} geöffnet.",
+  "update.notInstalledHint": "Dieser Ordner wurde nicht über den Velopack-Installer oder die Portable-Version bereitgestellt und kann sich daher nicht selbst aktualisieren. Bitte die neue Version herunterladen und diesen Ordner ersetzen."
 }

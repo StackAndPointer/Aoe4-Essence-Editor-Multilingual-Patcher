@@ -29,8 +29,14 @@
   "msg.noCatalog": "Каталоги не найдены. Ожидается catalogs\\<язык>\\<язык>.jsonl.",
   "summary.coverage": "Всего {0} · переведено {1} ({2}%)",
   "summary.applied": "Записано {0} из {1}",
-  "update.notConfigured": "Канал обновлений не настроен (update.json → githubRepo).",
   "update.available": "Доступна новая версия {0}.",
-  "update.none": "Установлена последняя версия.",
-  "log.title": "Журнал"
+  "update.none": "Установлена последняя версия ({0}).",
+  "log.title": "Журнал",
+  "update.title": "Доступно обновление",
+  "update.checking": "Проверка обновлений…",
+  "update.body": "Установлена версия {0}. На GitHub Releases доступна {1}.",
+  "update.download": "Открыть страницу загрузки",
+  "update.later": "Позже",
+  "update.downloadOpened": "Открыта страница загрузки {0}.",
+  "update.notInstalledHint": "Эта папка развёрнута не через установщик Velopack и не как portable-сборка, поэтому обновиться на месте нельзя. Скачайте новый выпуск и замените папку."
 }

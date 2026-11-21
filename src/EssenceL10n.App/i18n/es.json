@@ -29,8 +29,14 @@
   "msg.noCatalog": "No hay catálogos. Se esperaba catalogs\\<idioma>\\<idioma>.jsonl.",
   "summary.coverage": "{0} entradas · {1} traducidas ({2}%)",
   "summary.applied": "Se escribieron {0} de {1} entradas",
-  "update.notConfigured": "Canal de actualizaciones sin configurar (update.json → githubRepo).",
   "update.available": "Nueva versión {0} disponible.",
-  "update.none": "Ya tiene la última versión.",
-  "log.title": "Registro"
+  "update.none": "Ya tiene la última versión ({0}).",
+  "log.title": "Registro",
+  "update.title": "Actualización disponible",
+  "update.checking": "Buscando actualizaciones…",
+  "update.body": "Tiene instalada la {0}. En GitHub Releases está la {1}.",
+  "update.download": "Abrir página de descarga",
+  "update.later": "Más tarde",
+  "update.downloadOpened": "Se abrió la página de descarga de {0}.",
+  "update.notInstalledHint": "Esta carpeta no se desplegó con el instalador de Velopack ni con la versión portable, así que no puede actualizarse en el sitio. Descargue la nueva versión y sustituya la carpeta."
 }

@@ -29,8 +29,14 @@
   "msg.noCatalog": "言語カタログが見つかりません。catalogs\\<言語>\\<言語>.jsonl が必要です。",
   "summary.coverage": "全 {0} 件 · 翻訳済み {1} 件（{2}%）",
   "summary.applied": "{1} 件中 {0} 件を書き込みました",
-  "update.notConfigured": "更新チャネルが未設定です（update.json → githubRepo）。",
   "update.available": "新しいバージョン {0} があります。",
-  "update.none": "最新バージョンです。",
-  "log.title": "ログ"
+  "update.none": "最新バージョンです（{0}）。",
+  "log.title": "ログ",
+  "update.title": "新しいバージョンがあります",
+  "update.checking": "更新を確認しています…",
+  "update.body": "現在のバージョンは {0}、GitHub Releases に {1} があります。",
+  "update.download": "ダウンロードページを開く",
+  "update.later": "後で",
+  "update.downloadOpened": "{0} のダウンロードページを開きました。",
+  "update.notInstalledHint": "このフォルダーは Velopack インストーラー／ポータブル版で配置されていないため、その場で更新できません。新しいリリースをダウンロードして置き換えてください。"
 }

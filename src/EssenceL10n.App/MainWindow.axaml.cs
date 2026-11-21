@@ -264,39 +264,106 @@ public partial class MainWindow : Window
 
     private async Task CheckUpdatesAsync()
     {
-        var configPath = Path.Combine(AppContext.BaseDirectory, "update.json");
-        string? repo = null;
-        try
-        {
-            if (File.Exists(configPath))
-                repo = JsonDocument.Parse(File.ReadAllText(configPath)).RootElement.TryGetProperty("githubRepo", out var value)
-                    ? value.GetString()
-                    : null;
-        }
-        catch { }
+        Status(_i18n["update.checking"], "#6B7688");
+        Log("[update] current=" + Updater.CurrentVersion + " channel=" + (Updater.ConfiguredRepo() ?? "-"));
 
-        if (string.IsNullOrWhiteSpace(repo))
+        var result = await Updater.CheckAsync();
+        if (result.Error is not null && result.LatestVersion is null)
         {
-            Status(_i18n["update.notConfigured"], "#C9791A");
+            Status(_i18n["status.error"] + ": " + result.Error, "#C9791A");
+            Log("[update] error: " + result.Error);
             return;
         }
 
-        try
+        if (!result.HasUpdate)
         {
-            var manager = new UpdateManager(new GithubSource("https://github.com/" + repo.Trim(), null, false));
-            var update = await manager.CheckForUpdatesAsync();
-            if (update is null)
+            Status(_i18n.F("update.none", Updater.CurrentVersion));
+            Log("[update] no update, latest=" + (result.LatestVersion ?? "?"));
+            return;
+        }
+
+        Log($"[update] {result.CurrentVersion} -> {result.LatestVersion} ({result.Channel})");
+
+        // 安装版/便携版：原地增量更新
+        if (result.Channel is UpdateChannel.Velopack or UpdateChannel.Portable)
+        {
+            Status(_i18n.F("update.available", result.LatestVersion!));
+            try
             {
-                Status(_i18n["update.none"]);
-                return;
+                await Updater.ApplyAsync();
             }
-            Status(_i18n.F("update.available", update.TargetFullRelease.Version));
-            await manager.DownloadUpdatesAsync(update);
-            manager.ApplyUpdatesAndRestart(update);
+            catch (Exception ex)
+            {
+                Status(_i18n["status.error"] + ": " + ex.Message, "#C9791A");
+                Log("[update] apply failed: " + ex.Message);
+            }
+            return;
         }
-        catch (Exception ex)
+
+        // 普通文件夹：拿不到安装上下文，只能给出下载入口
+        var answer = await ShowUpdateDialogAsync(result);
+        if (answer == UpdateChoice.Download)
         {
-            Status(_i18n["status.error"] + ": " + ex.Message, "#C9791A");
+            Updater.OpenUrl(result.DownloadUrl ?? result.ReleaseUrl);
+            Status(_i18n.F("update.downloadOpened", result.LatestVersion!));
         }
+        else
+        {
+            Status(_i18n.F("update.available", result.LatestVersion!));
+        }
+    }
+
+    private enum UpdateChoice { Later, Download }
+
+    private async Task<UpdateChoice> ShowUpdateDialogAsync(UpdateCheckResult result)
+    {
+        var choice = UpdateChoice.Later;
+        var dialog = new Window
+        {
+            Title = _i18n["update.title"],
+            Width = 520,
+            SizeToContent = SizeToContent.Height,
+            WindowStartupLocation = WindowStartupLocation.CenterOwner,
+            CanResize = false,
+            Background = Brush.Parse("#FFFFFF"),
+        };
+
+        var download = new Button { Content = _i18n["update.download"], Padding = new Avalonia.Thickness(18, 8) };
+        var later = new Button { Content = _i18n["update.later"], Padding = new Avalonia.Thickness(18, 8) };
+        download.Click += (_, _) => { choice = UpdateChoice.Download; dialog.Close(); };
+        later.Click += (_, _) => { choice = UpdateChoice.Later; dialog.Close(); };
+
+        dialog.Content = new StackPanel
+        {
+            Margin = new Avalonia.Thickness(22),
+            Spacing = 14,
+            Children =
+            {
+                new TextBlock
+                {
+                    Text = _i18n.F("update.body", result.CurrentVersion ?? "?", result.LatestVersion ?? "?"),
+                    TextWrapping = Avalonia.Media.TextWrapping.Wrap,
+                    FontSize = 13,
+                    Foreground = Brush.Parse("#1B2330"),
+                },
+                new TextBlock
+                {
+                    Text = _i18n["update.notInstalledHint"],
+                    TextWrapping = Avalonia.Media.TextWrapping.Wrap,
+                    FontSize = 11,
+                    Foreground = Brush.Parse("#6B7688"),
+                },
+                new StackPanel
+                {
+                    Orientation = Avalonia.Layout.Orientation.Horizontal,
+                    HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Right,
+                    Spacing = 10,
+                    Children = { later, download },
+                },
+            },
+        };
+
+        await dialog.ShowDialog(this);
+        return choice;
     }
 }

@@ -29,8 +29,14 @@
   "msg.noCatalog": "找不到語言目錄，應位於 catalogs\\<語言>\\<語言>.jsonl。",
   "summary.coverage": "共 {0} 條 · 已翻譯 {1} 條（{2}%）",
   "summary.applied": "已寫入 {0}/{1} 條",
-  "update.notConfigured": "未設定更新通道（update.json → githubRepo）。",
   "update.available": "發現新版本 {0}。",
-  "update.none": "已是最新版本。",
-  "log.title": "日誌"
+  "update.none": "已是最新版本（{0}）。",
+  "log.title": "日誌",
+  "update.title": "發現新版本",
+  "update.checking": "正在檢查更新…",
+  "update.body": "目前版本 {0}，GitHub Releases 上有 {1}。",
+  "update.download": "開啟下載頁",
+  "update.later": "稍後",
+  "update.downloadOpened": "已開啟 {0} 的下載頁。",
+  "update.notInstalledHint": "目前是一般資料夾（未透過 Velopack 安裝程式或可攜版部署），無法原地自我更新。請下載新版本並取代目前目錄。"
 }

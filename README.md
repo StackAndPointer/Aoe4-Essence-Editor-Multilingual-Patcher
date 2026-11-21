@@ -173,8 +173,19 @@ git tag v1.0.0
 git push origin v1.0.0
 ```
 
-Installed clients read `update.json` (`{ "githubRepo": "…", "channel": "win" }`) and pick up
-new versions in place.
+Clients read `update.json` (`{ "githubRepo": "…", "channel": "win" }`) to find the release feed.
+How "Check updates" behaves depends on **how the app was deployed**:
+
+| Deployment | Self-update |
+|---|---|
+| `EssenceL10n-win-Setup.exe` (Velopack installer) | Full. Downloads deltas and restarts in place |
+| `EssenceL10n-win-Portable.zip` (Velopack portable) | Full. Updates in place |
+| `EssenceL10n-<version>-win-x64.zip` or a raw `publish/app` folder | None. Queries the GitHub Releases API, shows the new version, opens the download page |
+
+The third case is why `Velopack.UpdateManager` would otherwise throw
+`Cannot perform this operation in an application which is not installed`: a plain folder has no
+Velopack installation context (`sq.version`, `packages.win.json`, `Update.exe`). The updater
+checks `IsInstalled` / `IsPortable` first and falls back to the GitHub API instead of failing.
 
 ## Catalog format
 
