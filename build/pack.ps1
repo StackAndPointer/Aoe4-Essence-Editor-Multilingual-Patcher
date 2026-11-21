@@ -34,7 +34,11 @@ $common = @(
     '-p:IncludeNativeLibrariesForSelfExtract=true',
     '-p:EnableCompressionInSingleFile=true',
     '-p:DebugType=None',
-    '-p:DebugSymbols=false'
+    '-p:DebugSymbols=false',
+    # 必须注入：csproj 里写死的 Version 会让 exe 的 AssemblyInformationalVersion
+    # 与 tag 脱节，Updater 读到的当前版本永远不变，更新检查就永远误判
+    "-p:Version=$Version",
+    "-p:InformationalVersion=$Version"
 )
 
 Write-Host '==> 发布 CLI (EssenceL10n.Cli.exe)' -ForegroundColor Cyan

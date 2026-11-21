@@ -10,7 +10,8 @@
     <Product>Age of Empires IV — Essence Editor Multilingual Patcher</Product>
     <AssemblyTitle>Essence Editor Multilingual Patcher</AssemblyTitle>
     <Company>EssenceL10n</Company>
-    <Version>1.0.0</Version>
+    <!-- 实际版本由 build/pack.ps1 -Version 通过 -p:Version 注入 -->
+    <Version>0.0.0-dev</Version>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="11.3.6" />
